@@ -111,18 +111,15 @@ El proyecto tiene configurado deploy automático a Firebase Hosting mediante Git
 Para que los workflows funcionen, configura estos secrets en:
 `https://github.com/startup-ai-solutions/fluttersecure-blog/settings/secrets/actions`
 
-**Secrets requeridos:**
+**Secrets requeridos (8 total):**
 
 ```bash
-# 1. Firebase Service Account (para Hosting deploy)
+# 1. Firebase Service Account (usado para build SSG + deploy)
 FIREBASE_SERVICE_ACCOUNT_FLUTTER_D6447
 Valor: Contenido JSON completo del service account
+Propósito: Genera páginas estáticas Y hace deploy a Firebase Hosting
 
-# 2. Firebase Admin SDK (para build)
-FIREBASE_SERVICE_ACCOUNT_KEY
-Valor: El mismo JSON del service account
-
-# 3-9. Variables públicas de Firebase (desde .env.local)
+# 2-8. Variables públicas de Firebase (desde .env.local)
 NEXT_PUBLIC_FIREBASE_API_KEY
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
 NEXT_PUBLIC_FIREBASE_PROJECT_ID
