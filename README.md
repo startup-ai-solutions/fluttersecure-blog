@@ -2,6 +2,10 @@
 
 Blog de seguridad en aplicaciones móviles migrado de Flutter Web a Next.js 14.
 
+**Live Site**: [https://fluttersecure.dev](https://fluttersecure.dev)
+
+**Repository**: [startup-ai-solutions/fluttersecure-blog](https://github.com/startup-ai-solutions/fluttersecure-blog)
+
 ## Stack Tecnológico
 
 - **Framework**: Next.js 14 (App Router)
@@ -95,18 +99,58 @@ npm run start
 
 ## Deploy
 
-### Vercel (Recomendado)
+### GitHub Actions + Firebase Hosting (Configurado)
+
+El proyecto tiene configurado deploy automático a Firebase Hosting mediante GitHub Actions:
+
+- **Pull Requests**: Preview deploy automático en cada PR
+- **Main Branch**: Deploy a producción automático en cada merge
+
+#### Configurar GitHub Secrets
+
+Para que los workflows funcionen, configura estos secrets en:
+`https://github.com/startup-ai-solutions/fluttersecure-blog/settings/secrets/actions`
+
+**Secrets requeridos:**
+
+```bash
+# 1. Firebase Service Account (para Hosting deploy)
+FIREBASE_SERVICE_ACCOUNT_FLUTTER_D6447
+Valor: Contenido JSON completo del service account
+
+# 2. Firebase Admin SDK (para build)
+FIREBASE_SERVICE_ACCOUNT_KEY
+Valor: El mismo JSON del service account
+
+# 3-9. Variables públicas de Firebase (desde .env.local)
+NEXT_PUBLIC_FIREBASE_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+```
+
+**Obtener el Service Account JSON:**
+
+1. Ve a [Firebase Console](https://console.firebase.google.com/project/flutter-d6447/settings/serviceaccounts/adminsdk)
+2. Click en "Generate New Private Key"
+3. Descarga el archivo JSON
+4. Copia todo el contenido JSON y pégalo como valor del secret
+
+### Deploy Manual (Firebase CLI)
+
+```bash
+npm run build
+firebase deploy --only hosting --project flutter-d6447
+```
+
+### Vercel (Alternativa)
 
 1. Conecta el repositorio a Vercel
 2. Configura las variables de entorno en el dashboard de Vercel
 3. Deploy automático en cada push
-
-### Firebase Hosting
-
-```bash
-npm run build
-firebase deploy --only hosting
-```
 
 ## Características
 
@@ -116,3 +160,34 @@ firebase deploy --only hosting
 - **Tema Oscuro**: Branding de seguridad con acentos verdes (#69F0AE)
 - **Markdown Avanzado**: Syntax highlighting, GFM, tablas, etc.
 - **Responsive**: Diseño adaptable para móvil y desktop
+- **Dominio Custom**: Configurado en fluttersecure.dev con SSL automático
+- **CI/CD**: Deploy automático con GitHub Actions
+
+## Dominio Custom (fluttersecure.dev)
+
+El sitio está configurado para servirse en el dominio personalizado **fluttersecure.dev**:
+
+- **URL de producción**: https://fluttersecure.dev
+- **URL de Firebase**: https://flutter-d6447.web.app (ambas sirven el mismo contenido)
+- **SSL**: Certificado HTTPS automático gestionado por Firebase Hosting
+- **CDN**: Servido a través de Firebase CDN con baja latencia global
+
+El dominio ya está configurado y apuntando a Firebase Hosting. Cualquier deploy a la rama `main` actualizará automáticamente el contenido en fluttersecure.dev.
+
+## Migración desde Flutter Web
+
+Este proyecto reemplaza la versión anterior en Flutter Web manteniendo:
+
+- ✅ Mismo dominio custom (fluttersecure.dev)
+- ✅ Misma base de datos Firestore
+- ✅ Mismo sistema de autenticación Firebase
+- ✅ Mismo diseño y branding
+- ✅ Funcionalidad de votación mejorada
+
+**Mejoras respecto a Flutter Web:**
+
+- Mejor SEO (SSG vs SPA)
+- Menor tamaño de bundle (~300KB vs ~2MB)
+- Mejor rendimiento en Lighthouse
+- Código más mantenible (TypeScript + React)
+- Hot reload más rápido en desarrollo
