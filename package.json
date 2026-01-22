@@ -1,0 +1,43 @@
+{
+  "name": "fluttersecure-blog",
+  "version": "1.0.0",
+  "description": "Blog de seguridad en aplicaciones móviles",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "security",
+    "mobile",
+    "blog",
+    "flutter"
+  ],
+  "author": "Felipe Rincón",
+  "license": "MIT",
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "firebase": "^12.8.0",
+    "firebase-admin": "^13.6.0",
+    "lucide-react": "^0.562.0",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.9",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^16.1.4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  }
+}
