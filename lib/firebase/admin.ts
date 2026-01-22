@@ -6,7 +6,7 @@ import fs from 'fs'
 let app: App | undefined
 let db: Firestore | undefined
 
-function getAdminApp(): App {
+function getAdminApp(): App | null {
   if (app) return app
 
   const apps = getApps()
@@ -17,11 +17,16 @@ function getAdminApp(): App {
 
   // Opción 1: Variable de entorno (GitHub Actions / Vercel)
   if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-    app = initializeApp({
-      credential: cert(serviceAccount),
-    })
-    return app
+    try {
+      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+      app = initializeApp({
+        credential: cert(serviceAccount),
+      })
+      return app
+    } catch (error) {
+      console.warn('Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:', error)
+      return null
+    }
   }
 
   // Opción 2: Archivo local (desarrollo)
@@ -37,14 +42,22 @@ function getAdminApp(): App {
     return app
   }
 
-  throw new Error(
-    'Firebase credentials not found. Set FIREBASE_SERVICE_ACCOUNT_KEY env var or provide firebase-service-account.json'
+  // No hay credenciales disponibles - retornar null en lugar de error
+  // Esto permite que el build continúe sin SSG
+  console.warn(
+    'Firebase Admin credentials not found. Build will continue without SSG. ' +
+    'Pages will be rendered client-side. ' +
+    'To enable SSG, set FIREBASE_SERVICE_ACCOUNT_KEY env var or provide firebase-service-account.json'
   )
+  return null
 }
 
-export function getAdminFirestore(): Firestore {
+export function getAdminFirestore(): Firestore | null {
   if (db) return db
-  getAdminApp()
+
+  const adminApp = getAdminApp()
+  if (!adminApp) return null
+
   db = getFirestore()
   return db
 }

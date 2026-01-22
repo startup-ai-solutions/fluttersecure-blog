@@ -5,6 +5,13 @@ import type { Post, PostSummary } from '@/lib/types/post'
 export async function fetchPosts(): Promise<Post[]> {
   const db = getAdminFirestore()
 
+  // If no Firebase Admin credentials, return empty array
+  // Pages will be rendered client-side
+  if (!db) {
+    console.warn('Firebase Admin not available, returning empty posts array')
+    return []
+  }
+
   try {
     const snapshot = await db
       .collection('posts')
@@ -32,6 +39,12 @@ export async function fetchPosts(): Promise<Post[]> {
 // Fetch a single post by slug
 export async function fetchPostBySlug(slug: string): Promise<Post | null> {
   const db = getAdminFirestore()
+
+  // If no Firebase Admin credentials, return null
+  if (!db) {
+    console.warn('Firebase Admin not available, returning null for post')
+    return null
+  }
 
   try {
     const snapshot = await db
@@ -65,6 +78,13 @@ export async function fetchPostBySlug(slug: string): Promise<Post | null> {
 // Get all slugs for static generation
 export async function getAllSlugs(): Promise<string[]> {
   const db = getAdminFirestore()
+
+  // If no Firebase Admin credentials, return empty array
+  // No static pages will be generated, client will handle routing
+  if (!db) {
+    console.warn('Firebase Admin not available, returning empty slugs array')
+    return []
+  }
 
   try {
     const snapshot = await db.collection('posts').select('slug').get()
